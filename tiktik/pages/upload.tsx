@@ -9,6 +9,7 @@ import { data } from "autoprefixer";
 import { SanityAssetDocument } from "@sanity/client";
 import { topics } from "@/utils/constants";
 import postedBy from "@/sanity-backend/schemas/postedBy";
+import { BASE_URL } from "@/utils";
 
 const Upload = () => {
   const [isLoading, setisLoading] = useState(false);
@@ -65,10 +66,12 @@ const Upload = () => {
         topic: category,
       };
 
-      await axios.post(`http://localhost:3000/api/post`, document);
+      await axios.post(`${BASE_URL}/api/post`, document);
       router.push("/");
     }
   };
+
+  const clicked = () => router.push("/");
 
   return (
     <div className="flex w-full h-full absolute left-0 top-[60px] lg:top-[70px] mb-4 pt-10 lg:pt-10 bg-[#f8f8f8] justify-center">
