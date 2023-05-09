@@ -24,9 +24,11 @@ const Detail = ({ postDetails }: IProps) => {
   const [playing, setPlaying] = useState(false);
   const router = useRouter();
   const { userProfile }: any = useAuthStore();
+  const [comment, setComment] = useState("");
+  const [isPostingComment, setIsPostingComment] = useState(false);
 
   if (!post) return null;
-
+  // pause and play video
   const onVideoClick = () => {
     if (playing) {
       videoRef?.current?.pause();
@@ -36,13 +38,13 @@ const Detail = ({ postDetails }: IProps) => {
       setPlaying(true);
     }
   };
-
+  // to mute the video
   useEffect(() => {
     if (post && videoRef?.current) {
       videoRef.current.muted = isVideoMuted;
     }
   }, [post, isVideoMuted]);
-
+  // handle like
   const handleLike = async (like: boolean) => {
     if (userProfile) {
       const { data } = await axios.put(`${BASE_URL}/api/like`, {
@@ -54,10 +56,26 @@ const Detail = ({ postDetails }: IProps) => {
       setPost({ ...post, likes: data.likes });
     }
   };
+  // Add Comment
+  const addComment = async (e: any) => {
+    e.preventDefault();
+    if (userProfile && comment) {
+      setIsPostingComment(true);
+
+      const { data } = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
+        userId: userProfile._id,
+        comment,
+      });
+
+      setPost({ ...post, comments: data.comments });
+      setComment("");
+      setIsPostingComment(false);
+    }
+  };
 
   return (
     <div className="flex w-full absolute left-0 top-0 bg-white flex-wrap lg:flex-nowrap">
-      <div className="relative flex-2 w-[100%] h-full lg:w-[85%] flex justify-center items-center bg-black ">
+      <div className="relative flex-2 w-[100%] h-full lg:w-[95%] flex justify-center items-center bg-black ">
         <div className="absolute top-6 left-2 lg:left-6 flex gap-6 z-50">
           <p className="cursor-pointer" onClick={() => router.back()}>
             <MdOutlineCancel className="text-white text-[35px]" />
@@ -137,7 +155,13 @@ const Detail = ({ postDetails }: IProps) => {
               />
             )}
           </div>
-          <Comments />
+          <Comments
+            comment={comment}
+            setComment={setComment}
+            addComment={addComment}
+            comments={post.comments}
+            isPostingComment={isPostingComment}
+          />
         </div>
       </div>
     </div>

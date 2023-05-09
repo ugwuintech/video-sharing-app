@@ -11,6 +11,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // Functionality to add like
   if (req.method === "PUT") {
     const { userId, postId, like } = req.body;
 
