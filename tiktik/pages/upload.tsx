@@ -71,8 +71,6 @@ const Upload = () => {
     }
   };
 
-  const clicked = () => router.push("/");
-
   return (
     <div className="flex w-full h-full absolute left-0 top-[60px] lg:top-[70px] mb-4 pt-10 lg:pt-10 bg-[#f8f8f8] justify-center">
       <div className="bg-white w-[70%] rounded-lg mb-10 lg:h-[80vh]  flex gap-6 flex-wrap justify-center lg:justify-between items-center p-14 pt-6 h-full">
